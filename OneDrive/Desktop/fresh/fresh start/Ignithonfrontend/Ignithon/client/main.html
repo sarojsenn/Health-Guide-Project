@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthGuide - Your Personal Health Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            light: '#4F46E5',
+                            dark: '#6366F1'
+                        },
+                        secondary: {
+                            light: '#059669',
+                            dark: '#10B981'
+                        },
+                        background: {
+                            light: '#F3F4F6',
+                            dark: '#111827'
+                        },
+                        card: {
+                            light: '#FFFFFF',
+                            dark: '#1F2937'
+                        },
+                        text: {
+                            light: '#374151',
+                            dark: '#F9FAFB'
+                        },
+                        muted: {
+                            light: '#6B7280',
+                            dark: '#9CA3AF'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .health-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .health-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .chat-bubble {
+            border-radius: 20px;
+            border-bottom-left-radius: 2px;
+        }
+        
+        .user-bubble {
+            border-radius: 20px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .theme-toggle {
+            transition: all 0.3s ease;
+        }
+        
+        /* Gradient backgrounds */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-primary {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        }
+        
+        .gradient-secondary {
+            background: linear-gradient(135deg, #059669 0%, #0891B2 100%);
+        }
+        
+        /* Glass morphism effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .glass-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Animated progress bars */
+        .animated-progress {
+            background: linear-gradient(90deg, #4F46E5, #7C3AED, #EC4899);
+            background-size: 200% 200%;
+            animation: gradient-flow 3s ease infinite;
+        }
+        
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Floating animation */
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Pulse animation for buttons */
+        .pulse-btn {
+            animation: pulse-scale 2s infinite;
+        }
+        
+        @keyframes pulse-scale {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Custom scrollbar with gradient */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .dark ::-webkit-scrollbar-track {
+            background: #374151;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #4F46E5, #7C3AED);
+            border-radius: 4px;
+        }
+        
+        .dark ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #6366F1, #8B5CF6);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #3730A3, #6B21A8);
+        }
+        
+        /* Shimmer effect */
+        .shimmer {
+            background: linear-gradient(90deg, 
+                transparent 25%, 
+                rgba(255,255,255,0.5) 50%, 
+                transparent 75%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Glow effects */
+        .glow-primary {
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+        }
+        
+        .glow-secondary {
+            box-shadow: 0 0 20px rgba(5, 150, 105, 0.3);
+        }
+        
+        /* Animated icons */
+        .icon-bounce:hover {
+            animation: bounce 0.5s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 60%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            80% { transform: translateY(-5px); }
+        }
+
+        /* Goal Progress Bars */
+        .goal-progress-bar {
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Modal animations */
+        .modal-content {
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Progress indicator */
+        .progress-indicator {
+            transition: left 0.5s ease-in-out;
+        }
+
+        /* Hover effects for goal cards */
+        .goal-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Success/Error message animations */
+        .message-enter {
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark min-h-screen">
+    <nav class="bg-card-light/80 dark:bg-card-dark/80 backdrop-blur-lg shadow-soft py-3 px-6 flex justify-between items-center fixed top-0 left-0 right-0 z-50 border-b border-gray-200/20 dark:border-gray-700/20">
+        <div class="flex items-center flex-1">
+            <div class="flex items-center">
+                <div class="relative">
+                    <i class="fas fa-heartbeat text-primary-light dark:text-primary-dark text-2xl mr-3 icon-bounce"></i>
+                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-gradient-primary rounded-full animate-pulse"></div>
+                </div>
+                <h1 class="text-xl font-bold bg-gradient-to-r from-primary-light to-purple-600 bg-clip-text text-transparent">Health Guide</h1>
+            </div>
+            
+        </div>
+        
+        <div class="flex items-center space-x-6">
+            <div class="hidden md:flex space-x-6">
+                <a href="#profile" class="relative text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors group">
+                    Home
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-primary transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#nutriscan" class="relative text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors group">
+                    Medical Support
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-primary transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="../../../../Water And Sanitation/frontend/index.html" target="_blank" rel="noopener noreferrer" class="relative text-muted-light dark:text-muted-dark hover:text-primary-light dark:hover:text-primary-dark transition-colors group">
+                    Sanitation Support
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-primary transition-all duration-300 group-hover:w-full"></span>
+                </a>
+            </div>
+            
+            <button id="themeToggle" class="theme-toggle p-3 rounded-full bg-background-light/50 dark:bg-background-dark/50 backdrop-blur-sm hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-all duration-300 hover:scale-105">
+                <i class="fas fa-moon text-muted-light dark:text-yellow-300 transition-transform duration-300"></i>
+            </button>
+            
+            <button class="relative overflow-hidden gradient-primary text-white px-6 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg glow-primary group" 
+                    onclick="window.location.href='auth.html'">
+                <span class="relative z-10">Login / Sign Up</span>
+                <div class="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+            </button>
+        </div>
+    </nav>
+    
+    <div class="h-16"></div>
+
+    <section class="py-20 px-6 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-primary-light/5 to-purple-600/5"></div>
+        <div class="absolute top-20 left-20 w-32 h-32 bg-primary-light/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 right-20 w-40 h-40 bg-purple-600/10 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="inline-block px-4 py-2 bg-primary-light/10 dark:bg-primary-dark/10 rounded-full text-primary-light dark:text-primary-dark text-sm font-medium mb-6 backdrop-blur-sm">
+                        🚀 New AI-Powered Features Available
+                    </div>
+                    
+                    <h2 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                        Your Personal 
+                        <span class="bg-gradient-to-r from-primary-light via-purple-600 to-pink-500 bg-clip-text text-transparent animate-pulse">
+                            Health & Nutrition
+                        </span> 
+                        Assistant
+                    </h2>
+                    <p class="text-xl text-muted-light dark:text-muted-dark mb-10 leading-relaxed">
+                        Transform your wellness journey with AI-powered insights, personalized meal plans, and real-time health monitoring tailored just for you.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 mb-12">
+                        <button class="relative overflow-hidden gradient-primary text-white px-8 py-4 rounded-full font-medium transition-all duration-300 transform hover:scale-105 shadow-soft hover:shadow-lg glow-primary group">
+                            <span class="relative z-10 flex items-center">
+                                <i class="fas fa-rocket mr-2"></i>
+                                Get Started 
+                            </span>
+                            <div class="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                        </button>
+                        <button class="glass-card text-primary-light dark:text-primary-dark px-8 py-4 rounded-full font-medium hover:bg-gray-100/20 dark:hover:bg-gray-800/20 transition-all duration-300 group">
+                            <i class="fas fa-play mr-2 group-hover:scale-110 transition-transform"></i>
+                            Watch Demo
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center space-x-6">
+                        <div class="flex -space-x-3">
+                            <div class="w-12 h-12 rounded-full border-2 border-white dark:border-gray-800 bg-gradient-to-r from-blue-400 to-blue-600 shadow-lg"></div>
+                            <div class="w-12 h-12 rounded-full border-2 border-white dark:border-gray-800 bg-gradient-to-r from-green-400 to-green-600 shadow-lg"></div>
+                            <div class="w-12 h-12 rounded-full border-2 border-white dark:border-gray-800 bg-gradient-to-r from-purple-400 to-purple-600 shadow-lg"></div>
+                            <div class="w-12 h-12 rounded-full border-2 border-white dark:border-gray-800 bg-gradient-to-r from-pink-400 to-pink-600 shadow-lg flex items-center justify-center text-white font-bold text-sm">
+                                +10K
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm text-muted-light dark:text-muted-dark">
+                                <span class="font-semibold text-lg">12,000+</span> health enthusiasts trust us
+                            </p>
+                            <div class="flex items-center mt-1">
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="ml-2 text-sm text-muted-light dark:text-muted-dark">4.9/5 rating</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative float-animation">
+                    <div class="absolute inset-0 bg-gradient-to-r from-primary-light/20 to-purple-600/20 rounded-3xl transform rotate-6 blur-sm"></div>
+                    <div class="absolute inset-0 bg-gradient-to-l from-pink-500/20 to-orange-500/20 rounded-3xl transform -rotate-3 blur-sm"></div>
+                    <div class="relative glass-card rounded-3xl p-6 shadow-soft overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800" 
+                             alt="Health Dashboard" 
+                             class="rounded-2xl object-cover w-full h-[500px]">
+                        <div class="absolute top-8 left-8 glass-card rounded-xl p-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                                <span class="text-sm font-medium">Live Health Tracking</span>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-8 right-8 glass-card rounded-xl p-4">
+                            <div class="text-2xl font-bold gradient-primary bg-clip-text text-transparent">98%</div>
+                            <div class="text-xs text-muted-light dark:text-muted-dark">Health Score</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <main class="container mx-auto px-4 pb-20">
+        
+        <section id="profile" class="mb-16">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-4xl font-bold bg-gradient-to-r from-primary-light to-purple-600 bg-clip-text text-transparent">Your Health Journey</h2>
+                        <p class="text-muted-light dark:text-muted-dark mt-2">Track your progress and unlock new achievements</p>
+                    </div>
+                    <button id="addGoalBtn" class="glass-card text-primary-light dark:text-primary-dark px-6 py-3 rounded-full font-medium hover:bg-primary-light/10 dark:hover:bg-primary-dark/10 transition-all duration-300 transform hover:scale-105 glow-primary group">
+                        <i class="fas fa-plus mr-2 group-hover:rotate-180 transition-transform duration-300"></i> 
+                        Add Goal
+                    </button>
+                </div>
+                
+                <div class="grid md:grid-cols-12 gap-8">
+                    <div class="md:col-span-8">
+                        <div class="health-card bg-card-light dark:bg-card-dark p-8 rounded-3xl shadow-soft mb-8 relative overflow-hidden">
+                            
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-primary opacity-10 rounded-full blur-3xl"></div>
+                            
+                            <div class="flex items-start space-x-6 relative z-10">
+                                <div class="relative">
+                                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-light to-purple-600 p-0.5">
+                                        <div class="w-full h-full rounded-2xl bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                                            <i class="fas fa-user text-2xl text-primary-light"></i>
+                                        </div>
+                                    </div>
+                                    <div class="absolute -bottom-2 -right-2 w-6 h-6 bg-green-400 rounded-full border-2 border-white dark:border-gray-800 pulse-btn"></div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex flex-col gap-4 mb-6">
+                                        <div>
+                                            <h3 class="text-2xl font-bold" id="profileName">User Name</h3>
+                                            <p class="text-muted-light dark:text-muted-dark" id="profileId">Patient ID: #</p>
+                                        </div>
+                                        <div>
+                                            <button id="generatePdfBtn" class="gradient-primary text-white px-6 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg glow-primary group">
+                                                <i class="fas fa-file-pdf mr-2"></i>Download Medical History PDF
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="health-card bg-card-light dark:bg-card-dark p-8 rounded-3xl shadow-soft relative overflow-hidden">
+                            
+                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-primary"></div>
+                            
+                            <div class="flex items-center justify-between mb-8">
+                                <div>
+                                    <h3 class="text-2xl font-bold">Health Goals</h3>
+                                    <p class="text-muted-light dark:text-muted-dark">Track your daily wellness targets</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="glass-card p-3 rounded-xl hover:bg-primary-light/10 transition-all duration-300">
+                                        <i class="fas fa-chart-line text-primary-light"></i>
+                                    </button>
+                                    <button class="glass-card p-3 rounded-xl hover:bg-primary-light/10 transition-all duration-300">
+                                        <i class="fas fa-ellipsis-h text-muted-light dark:text-muted-dark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="goalsContainer" class="space-y-6">
+                                <div class="glass-card p-6 rounded-2xl hover:bg-primary-light/5 transition-all duration-300 group">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="relative">
+                                                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                                                    <i class="fas fa-tint text-white text-lg"></i>
+                                                </div>
+                                                <div class="absolute -top-1 -right-1 w-5 h-5 bg-green-400 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-check text-white text-xs"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold text-lg">Daily Water Intake</h4>
+                                                <p class="text-sm text-muted-light dark:text-muted-dark">Goal: 3L • Current: 2.2L</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <button class="gradient-primary text-white px-4 py-2 rounded-full text-sm font-medium hover:scale-105 transition-transform">
+                                                <i class="fas fa-plus mr-1"></i> Add
+                                            </button>
+                                            <p class="text-xs text-muted-light dark:text-muted-dark mt-1">Due today</p>
+                                        </div>
+                                    </div>
+                                    <div class="relative">
+                                        <div class="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="animated-progress h-full rounded-full" style="width: 73%"></div>
+                                        </div>
+                                        <div class="absolute -top-1 left-[73%] transform -translate-x-1/2">
+                                            <div class="w-5 h-5 bg-white dark:bg-gray-800 rounded-full border-2 border-blue-500 shadow-lg"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-right text-sm font-medium text-blue-600 dark:text-blue-400 mt-2">73% Complete</p>
+                                </div>
+                                
+                                <div class="glass-card p-6 rounded-2xl hover:bg-secondary-light/5 transition-all duration-300 group">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="relative">
+                                                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+                                                    <i class="fas fa-running text-white text-lg"></i>
+                                                </div>
+                                                <div class="absolute -top-1 -right-1 w-5 h-5 bg-orange-400 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-clock text-white text-xs"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold text-lg">Weekly Exercise Plan</h4>
+                                                <p class="text-sm text-muted-light dark:text-muted-dark">Goal: 5 days • Current: 3 days</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <button class="gradient-secondary text-white px-4 py-2 rounded-full text-sm font-medium hover:scale-105 transition-transform">
+                                                <i class="fas fa-play mr-1"></i> Start
+                                            </button>
+                                            <p class="text-xs text-muted-light dark:text-muted-dark mt-1">Due tomorrow</p>
+                                        </div>
+                                    </div>
+                                    <div class="relative">
+                                        <div class="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                            <div class="bg-gradient-secondary h-full rounded-full" style="width: 60%"></div>
+                                        </div>
+                                        <div class="absolute -top-1 left-[60%] transform -translate-x-1/2">
+                                            <div class="w-5 h-5 bg-white dark:bg-gray-800 rounded-full border-2 border-green-500 shadow-lg"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-right text-sm font-medium text-green-600 dark:text-green-400 mt-2">60% Complete</p>
+                                </div>
+
+                                <div class="glass-card p-6 rounded-2xl hover:bg-purple-500/5 transition-all duration-300 group">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                                                <i class="fas fa-chart-pie text-white text-lg"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold text-lg">Weekly BMI Analysis</h4>
+                                                <p class="text-sm text-green-500">
+                                                    <i class="fas fa-check-circle mr-1"></i>
+                                                    Completed this week
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <button class="glass-card text-purple-600 dark:text-purple-400 px-4 py-2 rounded-full text-sm font-medium hover:bg-purple-500/10 transition-all">
+                                            <i class="fas fa-eye mr-1"></i> View Report
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="text-center pt-4">
+                                    <button class="text-primary-light dark:text-primary-dark hover:underline text-sm font-medium flex items-center mx-auto group">
+                                        View all goals 
+                                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md:col-span-4">
+                        <div class="health-card bg-card-light dark:bg-card-dark p-6 rounded-2xl shadow-soft">
+                            <h3 class="text-xl font-semibold mb-6">Upcoming Events</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-primary-light/10 dark:bg-primary-dark/10 rounded-lg flex flex-col items-center justify-center">
+                                        <span class="text-sm font-medium text-primary-light dark:text-primary-dark">AUG</span>
+                                        <span class="text-lg font-bold text-primary-light dark:text-primary-dark">25</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium">Health Check-up</h4>
+                                        <p class="text-sm text-muted-light dark:text-muted-dark">9:00 AM</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-secondary-light/10 dark:bg-secondary-dark/10 rounded-lg flex flex-col items-center justify-center">
+                                        <span class="text-sm font-medium text-secondary-light dark:text-secondary-dark">AUG</span>
+                                        <span class="text-lg font-bold text-secondary-light dark:text-secondary-dark">27</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium">Nutrition Workshop</h4>
+                                        <p class="text-sm text-muted-light dark:text-muted-dark">2:30 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="w-full mt-6 text-center text-primary-light dark:text-primary-dark hover:underline text-sm font-medium">
+                                View All Events
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section id="nutriscan" class="mb-16">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold">HealthNutri Wellness Survey</h2>
+                        <p class="text-muted-light dark:text-muted-dark mt-2">Track your nutrition and wellness journey</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-12 gap-8">
+                    <div class="md:col-span-8">
+                        <div class="health-card bg-card-light dark:bg-card-dark p-6 rounded-2xl shadow-soft">
+                            <div class="flex items-center justify-between mb-8">
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">Personal Health Assessment</h3>
+                                    <p class="text-muted-light dark:text-muted-dark">Complete your health evaluation</p>
+                                </div>
+                                <div class="flex space-x-3">
+                                    <button class="px-4 py-2 bg-background-light dark:bg-background-dark rounded-lg text-sm">
+                                        Download
+                                    </button>
+                                    <button class="px-4 py-2 bg-primary-light text-white rounded-lg text-sm">
+                                        Connect
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-8">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-semibold">Overall Health Score</h4>
+                                    <span class="text-2xl font-bold text-primary-light dark:text-primary-dark">8.9/10</span>
+                                </div>
+                                <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+                                    <div class="h-full bg-primary-light dark:bg-primary-dark rounded-full" style="width: 89%"></div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-6">
+                                <div class="p-4 bg-background-light dark:bg-background-dark rounded-xl">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-medium">Nutritional Balance</span>
+                                        <span class="text-sm text-primary-light dark:text-primary-dark">8.5</span>
+                                    </div>
+                                    <p class="text-sm text-muted-light dark:text-muted-dark">Good balance of nutrients</p>
+                                </div>
+                                <div class="p-4 bg-background-light dark:bg-background-dark rounded-xl">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-medium">Physical Activity</span>
+                                        <span class="text-sm text-primary-light dark:text-primary-dark">7.8</span>
+                                    </div>
+                                    <p class="text-sm text-muted-light dark:text-muted-dark">Regular exercise routine</p>
+                                </div>
+                                <div class="p-4 bg-background-light dark:bg-background-dark rounded-xl">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="font-medium">Sleep Quality</span>
+                                        <span class="text-sm text-primary-light dark:text-primary-dark">8.2</span>
+                                    </div>
+                                    <p class="text-sm text-muted-light dark:text-muted-dark">Consistent sleep schedule</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <div class="health-card bg-card-light dark:bg-card-dark p-6 rounded-2xl shadow-soft mb-6">
+                            <h3 class="text-xl font-semibold mb-6">Quick Health Survey</h3>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">How would you rate your current health?</label>
+                                    <input type="range" class="w-full" min="0" max="10" value="8">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Are you comfortable discussing health concerns?</label>
+                                    <div class="flex space-x-4">
+                                        <button class="flex-1 py-2 bg-background-light dark:bg-background-dark rounded-lg text-sm">Agree</button>
+                                        <button class="flex-1 py-2 bg-background-light dark:bg-background-dark rounded-lg text-sm">Disagree</button>
+                                    </div>
+                                </div>
+                                
+                                <button class="w-full bg-primary-light dark:bg-primary-dark text-white py-2 rounded-lg text-sm">
+                                    Submit Survey
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="health-card bg-card-light dark:bg-card-dark p-6 rounded-2xl shadow-soft">
+                            <h3 class="text-xl font-semibold mb-6">Health Feedback</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3 p-3 bg-background-light dark:bg-background-dark rounded-lg">
+                                    <div class="w-8 h-8 rounded-full bg-gray-300"></div>
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-sm">Daily Health Feedback</h4>
+                                        <p class="text-xs text-muted-light dark:text-muted-dark">Track your daily wellness</p>
+                                    </div>
+                                    <button class="text-primary-light dark:text-primary-dark text-sm">View</button>
+                                </div>
+                                
+                                <div class="flex items-center space-x-3 p-3 bg-background-light dark:bg-background-dark rounded-lg">
+                                    <div class="w-8 h-8 rounded-full bg-gray-300"></div>
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-sm">Weekly Health Summary</h4>
+                                        <p class="text-xs text-muted-light dark:text-muted-dark">Get your weekly report</p>
+                                    </div>
+                                    <button class="text-primary-light dark:text-primary-dark text-sm">Download</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section id="recommendations" class="mb-16">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold">Personalized Meal Plans</h2>
+                        <p class="text-muted-light dark:text-muted-dark mt-2">AI-powered nutrition recommendations</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-12 gap-8">
+                    <div class="md:col-span-8">
+                        <div class="health-card bg-card-light dark:bg-card-dark p-6 rounded-2xl shadow-soft">
+                            <h3 class="text-xl font-semibold mb-6">Recommended Meals</h3>
+                            
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="bg-background-light dark:bg-background-dark rounded-xl overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=800" 
+                                         alt="Quinoa Salad" class="w-full h-32 object-cover">
+                                    <div class="p-4">
+                                        <h4 class="font-medium mb-2">Quinoa Salad</h4>
+                                        <div class="text-sm text-muted-light dark:text-muted-dark space-y-1">
+                                            <p>Calories: 320 | Protein: 15g | Carbs: 45g</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-background-light dark:bg-background-dark rounded-xl overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=800" 
+                                         alt="Overnight Oats" class="w-full h-32 object-cover">
+                                    <div class="p-4">
+                                        <h4 class="font-medium mb-2">Overnight Oats</h4>
+                                        <div class="text-sm text-muted-light dark:text-muted-dark space-y-1">
+                                            <p>Calories: 250 | Protein: 8g | Carbs: 40g</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-8">
+                                <div class="bg-background-light dark:bg-background-dark p-4 rounded-xl">
+                                    <p class="text-sm text-muted-light dark:text-muted-dark mb-2">
+                                        <span class="font-medium text-red-500">Disclaimer:</span> The recommendations provided are AI-generated and should be considered supplementary to professional medical advice.
+                                    </p>
+                                </div>
+                                
+                                <div class="mt-4 bg-background-light dark:bg-background-dark p-4 rounded-xl">
+                                    <p class="text-sm text-muted-light dark:text-muted-dark">
+                                        <span class="font-medium text-primary-light dark:text-primary-dark">Lab Suggestions:</span> Submit your latest health reports for personalized suggestions. You can schedule a lab test at your convenience.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <div class="health-card bg-card-light dark:bg-card-dark p-6 rounded-2xl shadow-soft">
+                            <h3 class="text-xl font-semibold mb-6">Lifestyle Guidance</h3>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="font-medium text-primary-light dark:text-primary-dark mb-2">Exercise Tips</h4>
+                                    <p class="text-sm text-muted-light dark:text-muted-dark">Engage in 30 minutes of moderate activity daily.</p>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-medium text-primary-light dark:text-primary-dark mb-2">Sleep Advice</h4>
+                                    <p class="text-sm text-muted-light dark:text-muted-dark">Aim for 7-8 hours of quality sleep each night.</p>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-medium text-primary-light dark:text-primary-dark mb-2">Hydration Guidance</h4>
+                                    <p class="text-sm text-muted-light dark:text-muted-dark">Drink at least 8 cups of water daily.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section id="firstaid" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">First Aid & Medicine Suggestions</h2>
+            
+            <div class="health-card bg-card-light dark:bg-card-dark p-6 rounded-xl shadow-md">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Symptom Checker</h3>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Select Symptoms</label>
+                            <select multiple class="w-full p-2 border rounded-md h-40 dark:bg-gray-700 dark:border-gray-600">
+                                <option>Headache</option>
+                                <option>Fever</option>
+                                <option>Cough</option>
+                                <option>Stomach ache</option>
+                                <option>Nausea</option>
+                                <option>Dizziness</option>
+                                <option>Muscle pain</option>
+                                <option>Sore throat</option>
+                                <option>Runny nose</option>
+                                <option>Rash</option>
+                            </select>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Hold Ctrl/Cmd to select multiple symptoms</p>
+                        </div>
+                        
+                        <button class="w-full bg-primary-light dark:bg-primary-dark text-white py-2 rounded-md font-medium">
+                            Get Recommendations
+                        </button>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Recommended Actions</h3>
+                        
+                        <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-md mb-4">
+                            <p class="text-sm"><span class="font-medium">Emergency Disclaimer:</span> In case of severe symptoms, immediately contact a healthcare professional.</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                            <h4 class="font-medium mb-2">For Headache & Fever</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li>Rest in a quiet, dark room</li>
+                                <li>Apply a cool compress to your forehead</li>
+                                <li>Stay hydrated with water or electrolyte solutions</li>
+                                <li>Consider OTC pain relievers like Paracetamol or Ibuprofen</li>
+                            </ul>
+                            
+                            <div class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                                <h4 class="font-medium mb-2">Commonly Available Medicines</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-white dark:bg-gray-700 px-2 py-1 rounded text-sm">Paracetamol</span>
+                                    <span class="bg-white dark:bg-gray-700 px-2 py-1 rounded text-sm">Ibuprofen</span>
+                                    <span class="bg-white dark:bg-gray-700 px-2 py-1 rounded text-sm">Aspirin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section id="rural" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Rural Healthcare Support</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="health-card bg-card-light dark:bg-card-dark p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4">Find Nearby Facilities</h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1">Your Location</label>
+                        <input type="text" id="locationInput" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600" placeholder="Enter your area or zip code">
+                        <button id="detectLocationBtn" class="mt-2 text-sm text-primary-light dark:text-primary-dark hover:underline">
+                            <i class="fas fa-location-arrow mr-1"></i>Auto-detect my location
+                        </button>
+                    </div>
+                    
+                    <button id="searchFacilitiesBtn" class="w-full bg-primary-light dark:bg-primary-dark text-white py-2 rounded-md font-medium mb-6">
+                        Search Nearby Facilities
+                    </button>
+                    
+                    <div id="facilitiesContainer" class="space-y-4">
+                        <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <h4 class="font-medium">Community Health Center</h4>
+                            <p class="text-sm mt-1">123 Main Street, Village</p>
+                            <p class="text-sm"><i class="fas fa-phone-alt mr-2"></i> +1 (555) 123-4567</p>
+                            <p class="text-sm text-green-600 dark:text-green-400 mt-2"><i class="fas fa-map-marker-alt mr-1"></i> 2.3 km away</p>
+                        </div>
+                        
+                        <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <h4 class="font-medium">Rural Medical Clinic</h4>
+                            <p class="text-sm mt-1">456 Oak Avenue, Countryside</p>
+                            <p class="text-sm"><i class="fas fa-phone-alt mr-2"></i> +1 (555) 987-6543</p>
+                            <p class="text-sm text-green-600 dark:text-green-400 mt-2"><i class="fas fa-map-marker-alt mr-1"></i> 5.1 km away</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="health-card bg-card-light dark:bg-card-dark p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4">Local Food Alternatives</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                            <h4 class="font-medium">Instead of Quinoa</h4>
+                            <p class="mt-1">Try locally available millets, brown rice, or barley</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Similar nutritional profile, more affordable</p>
+                        </div>
+                        
+                        <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                            <h4 class="font-medium">Instead of Salmon</h4>
+                            <p class="mt-1">Try locally available fish like mackerel, sardines, or freshwater fish</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Good source of Omega-3 fatty acids</p>
+                        </div>
+                        
+                        <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                            <h4 class="font-medium">Instead of Kale</h4>
+                            <p class="mt-1">Try spinach, mustard greens, or other local leafy vegetables</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Rich in vitamins and minerals</p>
+                        </div>
+                        
+                        <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                            <h4 class="font-medium">Instead of Almond Milk</h4>
+                            <p class="mt-1">Try homemade peanut milk or coconut milk</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Locally sourced, cost-effective alternatives</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center">Data Privacy & Security</h2>
+            
+            <div class="health-card bg-card-light dark:bg-card-dark p-6 rounded-xl shadow-md">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <i class="fas fa-shield-alt text-5xl text-primary-light dark:text-primary-dark mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-4">Your Data is Secure</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>All user data is encrypted and securely stored</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Consent-based sharing with healthcare providers</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Transparent data usage policies</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Regular security audits and updates</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                        <p class="text-lg font-medium text-center mb-4">"Your health data will never be sold or misused."</p>
+                        <p class="text-center">We are committed to protecting your privacy and ensuring the security of your personal health information.</p>
+                        
+                        <div class="mt-6 flex justify-center">
+                            <button class="bg-primary-light dark:bg-primary-dark text-white px-6 py-2 rounded-md font-medium">
+                                View Privacy Policy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    
+    <div class="fixed bottom-6 right-6 z-10">
+        <div class="relative">
+            <button id="chatbotToggle" class="chatbot-icon w-14 h-14 rounded-full bg-primary-light dark:bg-primary-dark text-white flex items-center justify-center shadow-lg">
+                <i class="fas fa-robot text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full"></span>
+            </button>
+            
+            <div id="chatbotWindow" class="hidden absolute bottom-16 right-0 w-80 h-96 bg-card-light dark:bg-card-dark rounded-lg shadow-xl flex flex-col">
+                <div class="bg-primary-light dark:bg-primary-dark text-white p-4 rounded-t-lg flex justify-between items-center">
+                    <h3 class="font-semibold">Health Assistant 🤖</h3>
+                    <button id="chatbotClose" class="text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div id="chatMessages" class="flex-1 p-4 overflow-y-auto">
+                    <div class="mb-4">
+                        <div class="bg-gray-100 dark:bg-gray-700 chat-bubble p-3 max-w-xs">
+                            <p class="text-sm">Hello! I'm your Health Assistant. How can I help you today?</p>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Just now</p>
+                    </div>
+                </div>
+                
+                <div class="p-3 border-t border-gray-200 dark:border-gray-700">
+                    <div class="flex">
+                        <input type="text" placeholder="Type your message..." class="flex-1 border rounded-l-md p-2 text-sm dark:bg-gray-700 dark:border-gray-600">
+                        <button class="bg-primary-light dark:bg-primary-dark text-white px-4 rounded-r-md">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <footer class="bg-card-light dark:bg-card-dark py-8 px-6 border-t border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="font-semibold mb-4">HealthGuide</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Your AI-powered health and nutrition assistant for better lifestyle choices.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-light dark:hover:text-primary-dark">About Us</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-light dark:hover:text-primary-dark">Features</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-light dark:hover:text-primary-dark">FAQ</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-light dark:hover:text-primary-dark">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-light dark:hover:text-primary-dark">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-light dark:hover:text-primary-dark">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary-light dark:hover:text-primary-dark">Data Security</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-gray-600 dark:text-gray-400"></i>
+                            <span class="text-gray-600 dark:text-gray-400">support@healthguide.com</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-gray-600 dark:text-gray-400"></i>
+                            <span class="text-gray-600 dark:text-gray-400">+1 (555) 123-4567</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+                <p>© 2023 HealthGuide. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="addGoalModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="modal-content bg-card-light dark:bg-card-dark rounded-3xl shadow-2xl max-w-md w-full mx-4 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-primary"></div>
+            
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold bg-gradient-to-r from-primary-light to-purple-600 bg-clip-text text-transparent">Add New Goal</h3>
+                    <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <form id="goalForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Goal Type</label>
+                        <select id="goalType" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent transition-all">
+                            <option value="">Select a goal type</option>
+                            <option value="water">Water Intake</option>
+                            <option value="exercise">Exercise/Fitness</option>
+                            <option value="sleep">Sleep Schedule</option>
+                            <option value="meditation">Meditation</option>
+                            <option value="nutrition">Nutrition</option>
+                            <option value="weight">Weight Management</option>
+                            <option value="steps">Daily Steps</option>
+                            <option value="custom">Custom Goal</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Goal Title</label>
+                        <input type="text" id="goalTitle" placeholder="e.g., Drink 8 glasses of water daily" 
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent transition-all">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Target Value</label>
+                            <input type="number" id="goalTarget" placeholder="8" 
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Unit</label>
+                            <input type="text" id="goalUnit" placeholder="glasses" 
+                                   class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent transition-all">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Frequency</label>
+                        <select id="goalFrequency" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent transition-all">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Priority</label>
+                        <select id="goalPriority" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent transition-all">
+                            <option value="low">Low Priority</option>
+                            <option value="medium" selected>Medium Priority</option>
+                            <option value="high">High Priority</option>
+                        </select>
+                    </div>
+
+                    <div class="flex space-x-3 pt-4">
+                        <button type="button" id="cancelGoalBtn" class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all font-medium">
+                            Cancel
+                        </button>
+                        <button type="submit" class="flex-1 gradient-primary text-white px-4 py-3 rounded-xl font-medium hover:scale-105 transition-all shadow-lg">
+                            <i class="fas fa-plus mr-2"></i>Add Goal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        
+        // Check for saved theme preference or respect OS preference
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun text-yellow-300"></i>';
+        } else {
+            htmlElement.classList.remove('dark');
+            themeToggle.innerHTML = '<i class="fas fa-moon text-gray-700"></i>';
+        }
+        
+        // Toggle theme on button click
+        themeToggle.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon text-gray-700"></i>';
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun text-yellow-300"></i>';
+            }
+        });
+        
+        // Chatbot Toggle Functionality
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotClose = document.getElementById('chatbotClose');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        
+        chatbotToggle.addEventListener('click', () => {
+            chatbotWindow.classList.toggle('hidden');
+        });
+        
+        chatbotClose.addEventListener('click', () => {
+            chatbotWindow.classList.add('hidden');
+        });
+        
+        // Gemini AI Chatbot Implementation
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.querySelector('#chatbotWindow input');
+        const chatSend = document.querySelector('#chatbotWindow button');
+        
+        // Store conversation session ID
+        let sessionId = generateSessionId();
+        
+        // Generate unique session ID
+        function generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+        
+        chatSend.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            // Disable input while processing
+            chatInput.disabled = true;
+            chatSend.disabled = true;
+            
+            // Add user message
+            addUserMessage(message);
+            
+            // Clear input
+            chatInput.value = '';
+            
+            // Show typing indicator
+            const typingIndicator = addTypingIndicator();
+            
+            try {
+                // Send message to Gemini API
+                const response = await fetch('http://localhost:5000/api/chatbot/chat-with-history', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        message: message,
+                        sessionId: sessionId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // Remove typing indicator
+                typingIndicator.remove();
+                
+                if (data.success) {
+                    addBotMessage(data.response);
+                } else {
+                    addBotMessage('Sorry, I encountered an error. Please try again.');
+                }
+                
+            } catch (error) {
+                console.error('Chat error:', error);
+                typingIndicator.remove();
+                addBotMessage('Sorry, I\'m having trouble connecting. Please check if the server is running.');
+            }
+            
+            // Re-enable input
+            chatInput.disabled = false;
+            chatSend.disabled = false;
+            chatInput.focus();
+        }
+        
+        function addUserMessage(message) {
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'mb-4 flex justify-end';
+            userMessageDiv.innerHTML = `
+                <div>
+                    <div class="bg-primary-light dark:bg-primary-dark text-white user-bubble p-3 max-w-xs">
+                        <p class="text-sm">${escapeHtml(message)}</p>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 text-right">Just now</p>
+                </div>
+            `;
+            chatMessages.appendChild(userMessageDiv);
+            scrollToBottom();
+        }
+        
+        function addBotMessage(message) {
+            const aiMessageDiv = document.createElement('div');
+            aiMessageDiv.className = 'mb-4';
+            aiMessageDiv.innerHTML = `
+                <div class="bg-gray-100 dark:bg-gray-700 chat-bubble p-3 max-w-xs">
+                    <p class="text-sm">${escapeHtml(message)}</p>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Just now</p>
+            `;
+            chatMessages.appendChild(aiMessageDiv);
+            scrollToBottom();
+        }
+        
+        function addTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'mb-4 typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="bg-gray-100 dark:bg-gray-700 chat-bubble p-3 max-w-xs">
+                    <p class="text-sm text-gray-500">
+                        <span class="inline-block w-2 h-2 bg-gray-400 rounded-full mr-1 animate-bounce"></span>
+                        <span class="inline-block w-2 h-2 bg-gray-400 rounded-full mr-1 animate-bounce" style="animation-delay: 0.1s"></span>
+                        <span class="inline-block w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+                    </p>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            scrollToBottom();
+            return typingDiv;
+        }
+        
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Clear conversation button (optional)
+        function clearConversation() {
+            sessionId = generateSessionId();
+            // Keep only the initial greeting message
+            const initialMessage = chatMessages.querySelector('.mb-4');
+            chatMessages.innerHTML = '';
+            if (initialMessage) {
+                chatMessages.appendChild(initialMessage);
+            }
+        }
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Sample data for interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update profile UI with user data from token
+            updateProfileUI();
+            
+            // Simulate loading of user data
+            setTimeout(() => {
+                const healthScore = document.querySelector('.health-card .text-2xl');
+                if (healthScore) {
+                    healthScore.textContent = '';
+                }
+            }, 500);
+            
+            // First Aid & Medicine Recommendations functionality
+            const symptomSelect = document.querySelector('#firstaid select[multiple]');
+            const recommendBtn = document.querySelector('#firstaid button');
+            const disclaimerDiv = document.querySelector('#firstaid .bg-red-50');
+            const actionsDiv = document.querySelector('#firstaid .bg-gray-50');
+            
+            if (recommendBtn && symptomSelect) {
+                recommendBtn.addEventListener('click', async function() {
+                    const selectedOptions = Array.from(symptomSelect.selectedOptions);
+                    const symptoms = selectedOptions.map(option => option.value);
+                    
+                    if (symptoms.length === 0) {
+                        alert('Please select at least one symptom');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    recommendBtn.textContent = 'Loading...';
+                    recommendBtn.disabled = true;
+                    
+                    try {
+                        const response = await fetch('http://localhost:3000/api/firstaid', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ symptoms: symptoms })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (response.ok) {
+                            // Update disclaimer
+                            if (data.disclaimer) {
+                                disclaimerDiv.innerHTML = `<p class="text-sm"><span class="font-medium">Emergency Disclaimer:</span> ${data.disclaimer}</p>`;
+                            }
+                            
+                            // Update actions
+                            let actionsHTML = `<h4 class="font-medium mb-2">Recommended Actions for ${symptoms.join(', ')}</h4>`;
+                            if (data.actions && data.actions.length > 0) {
+                                actionsHTML += '<ul class="list-disc pl-5 space-y-1 text-sm">';
+                                data.actions.forEach(action => {
+                                    actionsHTML += `<li>${action}</li>`;
+                                });
+                                actionsHTML += '</ul>';
+                            }
+                            
+                            // Update medicines
+                            if (data.medicines && data.medicines.length > 0) {
+                                actionsHTML += `
+                                    <div class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                                        <h4 class="font-medium mb-2">Recommended Medicines</h4>
+                                        <div class="flex flex-wrap gap-2">
+                                `;
+                                data.medicines.forEach(medicine => {
+                                    actionsHTML += `<span class="bg-white dark:bg-gray-700 px-2 py-1 rounded text-sm">${medicine}</span>`;
+                                });
+                                actionsHTML += '</div></div>';
+                            }
+                            
+                            actionsDiv.innerHTML = actionsHTML;
+                        } else {
+                            alert('Error getting recommendations: ' + (data.error || 'Unknown error'));
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Failed to connect to server. Make sure the backend is running on port 3000.');
+                    } finally {
+                        // Reset button
+                        recommendBtn.textContent = 'Get Recommendations';
+                        recommendBtn.disabled = false;
+                    }
+                });
+            }
+            
+            // Location Detection and Facility Search functionality
+            const locationInput = document.getElementById('locationInput');
+            const detectLocationBtn = document.getElementById('detectLocationBtn');
+            const searchFacilitiesBtn = document.getElementById('searchFacilitiesBtn');
+            const facilitiesContainer = document.getElementById('facilitiesContainer');
+            
+            let userCoordinates = null;
+            
+            // Auto-detect location functionality
+            if (detectLocationBtn) {
+                detectLocationBtn.addEventListener('click', function() {
+                    if (navigator.geolocation) {
+                        detectLocationBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Detecting...';
+                        
+                        navigator.geolocation.getCurrentPosition(
+                            function(position) {
+                                userCoordinates = {
+                                    latitude: position.coords.latitude,
+                                    longitude: position.coords.longitude
+                                };
+                                locationInput.value = `Lat: ${position.coords.latitude.toFixed(4)}, Lng: ${position.coords.longitude.toFixed(4)}`;
+                                detectLocationBtn.innerHTML = '<i class="fas fa-check mr-1"></i>Location detected';
+                                detectLocationBtn.style.color = 'green';
+                            },
+                            function(error) {
+                                console.error('Geolocation error:', error);
+                                alert('Unable to detect location. Please enter manually.');
+                                detectLocationBtn.innerHTML = '<i class="fas fa-location-arrow mr-1"></i>Auto-detect my location';
+                            }
+                        );
+                    } else {
+                        alert('Geolocation is not supported by this browser.');
+                    }
+                });
+            }
+            
+            // Search nearby facilities functionality
+            if (searchFacilitiesBtn) {
+                searchFacilitiesBtn.addEventListener('click', async function() {
+                    const location = locationInput.value.trim();
+                    
+                    if (!location && !userCoordinates) {
+                        alert('Please enter a location or use auto-detect');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    searchFacilitiesBtn.textContent = 'Searching...';
+                    searchFacilitiesBtn.disabled = true;
+                    
+                    try {
+                        const requestBody = userCoordinates ? 
+                            { latitude: userCoordinates.latitude, longitude: userCoordinates.longitude } :
+                            { location: location };
+                            
+                        const response = await fetch('http://localhost:3000/api/nearby-facilities', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(requestBody)
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (response.ok && data.facilities) {
+                            // Show message if provided
+                            let facilitiesHTML = '';
+                            if (data.message) {
+                                facilitiesHTML += `
+                                    <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg mb-4 border-l-4 border-blue-500">
+                                        <p class="text-sm text-blue-700 dark:text-blue-300">
+                                            <i class="fas fa-info-circle mr-2"></i>${data.message}
+                                        </p>
+                                    </div>
+                                `;
+                            }
+                            
+                            // Update facilities list
+                            data.facilities.forEach(facility => {
+                                const typeIcon = facility.type === 'hospital' ? 'fa-hospital' : 
+                                               facility.type === 'clinic' ? 'fa-clinic-medical' : 'fa-plus-circle';
+                                const typeColor = facility.type === 'hospital' ? 'text-red-600 dark:text-red-400' : 
+                                                facility.type === 'clinic' ? 'text-blue-600 dark:text-blue-400' : 'text-green-600 dark:text-green-400';
+                                
+                                facilitiesHTML += `
+                                    <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border hover:border-primary-light dark:hover:border-primary-dark transition-all">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <div class="flex items-center mb-2">
+                                                    <i class="fas ${typeIcon} ${typeColor} mr-2"></i>
+                                                    <h4 class="font-medium text-lg">${facility.name}</h4>
+                                                    ${facility.type ? `<span class="ml-2 px-2 py-1 text-xs rounded-full bg-primary-light/10 dark:bg-primary-dark/10 text-primary-light dark:text-primary-dark">${facility.type}</span>` : ''}
+                                                </div>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                                                    <i class="fas fa-map-marker-alt mr-2"></i>${facility.address}
+                                                </p>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                                                    <i class="fas fa-phone-alt mr-2"></i>${facility.phone}
+                                                </p>
+                                                <p class="text-sm text-green-600 dark:text-green-400">
+                                                    <i class="fas fa-route mr-2"></i>${facility.distance}
+                                                </p>
+                                            </div>
+                                            <button class="ml-4 px-3 py-2 bg-primary-light dark:bg-primary-dark text-white rounded-lg text-sm hover:bg-primary-light/90 dark:hover:bg-primary-dark/90 transition-all">
+                                                <i class="fas fa-directions mr-1"></i>Directions
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            facilitiesContainer.innerHTML = facilitiesHTML;
+                        } else {
+                            alert('Error finding facilities: ' + (data.error || 'Unknown error'));
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Failed to connect to server. Make sure the backend is running on port 3000.');
+                    } finally {
+                        // Reset button
+                        searchFacilitiesBtn.textContent = 'Search Nearby Facilities';
+                        searchFacilitiesBtn.disabled = false;
+                    }
+                });
+            }
+        });
+        
+        // Function to update profile UI with user data
+        async function updateProfileUI() {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                console.log("No token found, user not logged in");
+                return;
+            }
+            
+            try {
+                console.log("Fetching user profile...");
+                const res = await fetch("http://localhost:5000/api/auth/profile", {
+                    method: "GET",
+                    headers: { "Authorization": `Bearer ${token}` },
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    console.log("Profile data received:", data);
+                    
+                    if (data && data.name) {
+                        const profileNameEl = document.getElementById("profileName");
+                        const profileIdEl = document.getElementById("profileId");
+                        
+                        if (profileNameEl) {
+                            profileNameEl.textContent = data.name;
+                            console.log("Updated profile name to:", data.name);
+                        }
+                        if (profileIdEl) {
+                            const shortId = data._id ? data._id.slice(-6) : 'N/A';
+                            profileIdEl.textContent = `Patient ID: #${shortId}`;
+                            console.log("Updated profile ID to:", shortId);
+                        }
+                        
+                        console.log("Profile updated successfully");
+                    } else {
+                        console.log("No user data in response");
+                    }
+                } else {
+                    console.error("Failed to fetch profile, status:", res.status);
+                    // Token might be invalid, redirect to auth
+                    if (res.status === 401) {
+                        localStorage.removeItem("token");
+                        console.log("Invalid token, redirecting to auth...");
+                        // Uncomment the next line if you want to redirect on invalid token
+                        // window.location.href = "auth.html";
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to fetch profile", e);
+            }
+        }
+
+        // Goals Management System
+        let userGoals = JSON.parse(localStorage.getItem('userGoals')) || [];
+
+        // Load default goals if none exist
+        if (userGoals.length === 0) {
+            userGoals = [
+                {
+                    id: 'goal-1',
+                    type: 'water',
+                    title: 'Daily Water Intake',
+                    target: 3,
+                    unit: 'L',
+                    current: 2.2,
+                    frequency: 'daily',
+                    priority: 'high',
+                    icon: 'fa-tint',
+                    color: 'from-blue-400 to-blue-600',
+                    progress: 73
+                },
+                {
+                    id: 'goal-2',
+                    type: 'exercise',
+                    title: 'Weekly Exercise Plan',
+                    target: 5,
+                    unit: 'days',
+                    current: 3,
+                    frequency: 'weekly',
+                    priority: 'medium',
+                    icon: 'fa-running',
+                    color: 'from-green-400 to-green-600',
+                    progress: 60
+                }
+            ];
+            localStorage.setItem('userGoals', JSON.stringify(userGoals));
+        }
+
+        // Goal icons mapping
+        const goalIcons = {
+            water: 'fa-tint',
+            exercise: 'fa-running',
+            sleep: 'fa-bed',
+            meditation: 'fa-leaf',
+            nutrition: 'fa-apple-alt',
+            weight: 'fa-weight',
+            steps: 'fa-walking',
+            custom: 'fa-star'
+        };
+
+        // Goal colors mapping
+        const goalColors = {
+            water: 'from-blue-400 to-blue-600',
+            exercise: 'from-green-400 to-green-600',
+            sleep: 'from-purple-400 to-purple-600',
+            meditation: 'from-indigo-400 to-indigo-600',
+            nutrition: 'from-orange-400 to-orange-600',
+            weight: 'from-red-400 to-red-600',
+            steps: 'from-yellow-400 to-yellow-600',
+            custom: 'from-pink-400 to-pink-600'
+        };
+
+        // Render goals
+        function renderGoals() {
+            const container = document.getElementById('goalsContainer');
+            if (!container) return;
+
+            let goalsHTML = '';
+            userGoals.forEach(goal => {
+                const progressPercent = Math.round((goal.current / goal.target) * 100);
+                const priorityIcon = goal.priority === 'high' ? 'fa-exclamation' : goal.priority === 'medium' ? 'fa-clock' : 'fa-minus';
+                const priorityColor = goal.priority === 'high' ? 'bg-red-400' : goal.priority === 'medium' ? 'bg-orange-400' : 'bg-green-400';
+
+                goalsHTML += `
+                    <div class="glass-card goal-card p-6 rounded-2xl hover:bg-primary-light/5 transition-all duration-300 group" data-goal-id="${goal.id}">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="relative">
+                                    <div class="w-12 h-12 bg-gradient-to-br ${goal.color} rounded-2xl flex items-center justify-center shadow-lg">
+                                        <i class="fas ${goal.icon} text-white text-lg"></i>
+                                    </div>
+                                    <div class="absolute -top-1 -right-1 w-5 h-5 ${priorityColor} rounded-full flex items-center justify-center">
+                                        <i class="fas ${priorityIcon} text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-lg">${goal.title}</h4>
+                                    <p class="text-sm text-muted-light dark:text-muted-dark">Goal: ${goal.target}${goal.unit} • Current: ${goal.current}${goal.unit}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <button class="gradient-primary text-white px-4 py-2 rounded-full text-sm font-medium hover:scale-105 transition-transform" onclick="updateGoalProgress('${goal.id}')">
+                                    <i class="fas fa-plus mr-1"></i> Update
+                                </button>
+                                <button class="ml-2 text-red-500 hover:text-red-700 p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all" onclick="deleteGoal('${goal.id}')" title="Delete Goal">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </button>
+                                <p class="text-xs text-muted-light dark:text-muted-dark mt-1 capitalize">${goal.frequency}</p>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <div class="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="goal-progress-bar bg-gradient-to-r ${goal.color} h-full rounded-full" style="width: ${Math.min(progressPercent, 100)}%"></div>
+                            </div>
+                            ${progressPercent <= 100 ? `
+                                <div class="progress-indicator absolute -top-1 transform -translate-x-1/2" style="left: ${Math.min(progressPercent, 100)}%">
+                                    <div class="w-5 h-5 bg-white dark:bg-gray-800 rounded-full border-2 border-blue-500 shadow-lg"></div>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="flex justify-between items-center mt-2">
+                            <p class="text-sm font-medium ${progressPercent >= 100 ? 'text-green-600 dark:text-green-400' : 'text-blue-600 dark:text-blue-400'}">
+                                ${progressPercent >= 100 ? '🎉 Goal Achieved!' : `${progressPercent}% Complete`}
+                            </p>
+                            ${progressPercent >= 100 ? '<i class="fas fa-trophy text-yellow-500 text-lg"></i>' : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Add view all goals button
+            goalsHTML += `
+                <div class="text-center pt-4">
+                    <button class="text-primary-light dark:text-primary-dark hover:underline text-sm font-medium flex items-center mx-auto group">
+                        View all goals 
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+            `;
+
+            container.innerHTML = goalsHTML;
+        }
+
+        // Add new goal
+        function addNewGoal(goalData) {
+            const newGoal = {
+                id: `goal-${Date.now()}`,
+                type: goalData.type,
+                title: goalData.title,
+                target: parseFloat(goalData.target),
+                unit: goalData.unit,
+                current: 0,
+                frequency: goalData.frequency,
+                priority: goalData.priority,
+                icon: goalIcons[goalData.type] || 'fa-star',
+                color: goalColors[goalData.type] || 'from-gray-400 to-gray-600',
+                progress: 0
+            };
+
+            userGoals.push(newGoal);
+            localStorage.setItem('userGoals', JSON.stringify(userGoals));
+            renderGoals();
+        }
+
+        // Update goal progress
+        function updateGoalProgress(goalId) {
+            const goal = userGoals.find(g => g.id === goalId);
+            if (!goal) return;
+
+            const newValue = prompt(`Update ${goal.title}\nCurrent: ${goal.current}${goal.unit}\nEnter new value:`, goal.current);
+            if (newValue !== null && !isNaN(newValue)) {
+                goal.current = parseFloat(newValue);
+                goal.progress = Math.round((goal.current / goal.target) * 100);
+                localStorage.setItem('userGoals', JSON.stringify(userGoals));
+                renderGoals();
+                
+                // Show success message
+                showGoalMessage(`Updated ${goal.title} to ${goal.current}${goal.unit}!`, 'success');
+            }
+        }
+
+        // Delete goal
+        function deleteGoal(goalId) {
+            if (confirm('Are you sure you want to delete this goal?')) {
+                userGoals = userGoals.filter(g => g.id !== goalId);
+                localStorage.setItem('userGoals', JSON.stringify(userGoals));
+                renderGoals();
+                showGoalMessage('Goal deleted successfully!', 'success');
+            }
+        }
+
+        // Show goal message
+        function showGoalMessage(message, type = 'info') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message-enter fixed top-20 right-4 z-50 px-6 py-4 rounded-xl shadow-lg transform translate-x-full transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            messageDiv.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-times-circle' : 'fa-info-circle'} mr-2"></i>
+                    <span class="font-medium">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(messageDiv);
+            
+            // Animate in
+            setTimeout(() => {
+                messageDiv.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                if (messageDiv.parentElement) {
+                    messageDiv.style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        if (messageDiv.parentElement) {
+                            document.body.removeChild(messageDiv);
+                        }
+                    }, 300);
+                }
+            }, 4000);
+        }
+
+        // Modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const addGoalBtn = document.getElementById('addGoalBtn');
+            const addGoalModal = document.getElementById('addGoalModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const cancelGoalBtn = document.getElementById('cancelGoalBtn');
+            const goalForm = document.getElementById('goalForm');
+            const goalTypeSelect = document.getElementById('goalType');
+
+            // Auto-populate fields based on goal type
+            goalTypeSelect.addEventListener('change', function() {
+                const type = this.value;
+                const titleInput = document.getElementById('goalTitle');
+                const unitInput = document.getElementById('goalUnit');
+                const targetInput = document.getElementById('goalTarget');
+
+                const templates = {
+                    water: { title: 'Daily Water Intake', unit: 'L', target: 2.5 },
+                    exercise: { title: 'Weekly Exercise', unit: 'days', target: 5 },
+                    sleep: { title: 'Sleep Schedule', unit: 'hours', target: 8 },
+                    meditation: { title: 'Daily Meditation', unit: 'minutes', target: 20 },
+                    nutrition: { title: 'Healthy Meals', unit: 'meals', target: 3 },
+                    weight: { title: 'Weight Management', unit: 'kg', target: 70 },
+                    steps: { title: 'Daily Steps', unit: 'steps', target: 10000 }
+                };
+
+                if (templates[type]) {
+                    titleInput.value = templates[type].title;
+                    unitInput.value = templates[type].unit;
+                    targetInput.value = templates[type].target;
+                }
+            });
+
+            // Open modal
+            if (addGoalBtn) {
+                addGoalBtn.addEventListener('click', function() {
+                    addGoalModal.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            // Close modal functions
+            function closeModal() {
+                addGoalModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                goalForm.reset();
+            }
+
+            if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+            if (cancelGoalBtn) cancelGoalBtn.addEventListener('click', closeModal);
+
+            // Close modal on outside click
+            addGoalModal.addEventListener('click', function(e) {
+                if (e.target === addGoalModal) closeModal();
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // ESC to close modal
+                if (e.key === 'Escape' && !addGoalModal.classList.contains('hidden')) {
+                    closeModal();
+                }
+                // Ctrl+G to open Add Goal modal
+                if (e.ctrlKey && e.key === 'g' && addGoalModal.classList.contains('hidden')) {
+                    e.preventDefault();
+                    addGoalBtn.click();
+                }
+            });
+
+            // Handle form submission
+            if (goalForm) {
+                goalForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    const goalData = {
+                        type: document.getElementById('goalType').value,
+                        title: document.getElementById('goalTitle').value,
+                        target: document.getElementById('goalTarget').value,
+                        unit: document.getElementById('goalUnit').value,
+                        frequency: document.getElementById('goalFrequency').value,
+                        priority: document.getElementById('goalPriority').value
+                    };
+
+                    // Validate form
+                    if (!goalData.type || !goalData.title || !goalData.target || !goalData.unit) {
+                        showGoalMessage('Please fill in all required fields!', 'error');
+                        return;
+                    }
+
+                    addNewGoal(goalData);
+                    closeModal();
+                    showGoalMessage('Goal added successfully!', 'success');
+                });
+            }
+
+            // Initial render
+            renderGoals();
+        });
+    </script>
+</body>
+</html>
+

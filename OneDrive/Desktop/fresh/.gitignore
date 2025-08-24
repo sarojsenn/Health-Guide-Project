@@ -1,0 +1,39 @@
+# Ignore system files and directories
+node_modules/
+.env
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+.vscode/
+.idea/
+
+# Ignore user-specific directories and files (outside project)
+../../../*
+!fresh start/
+!Water And Sanitation/
+!PROJECT_WORKFLOW.md
+
+# Ignore build artifacts
+dist/
+build/
+*.min.js
+*.min.css
+
+# Ignore package manager files
+package-lock.json
+yarn.lock
+
+# Ignore uploads and temporary files
+uploads/
+temp/
+tmp/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
