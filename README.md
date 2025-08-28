@@ -1,12 +1,116 @@
-# 🌟 HealthGuide - Complete Health & Wellness Platform
+# 🌟 MediMate - Complete Health & Wellness Platform
 
 [![Node.js](https://img.shields.io/badge/Node.js-16.x-green.svg)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green.svg)](https://www.mongodb.com/atlas)
 [![Express.js](https://img.shields.io/badge/Express.js-4.x-blue.svg)](https://expressjs.com/)
 [![JWT](https://img.shields.io/badge/JWT-Authentication-orange.svg)](https://jwt.io/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-blue.svg)](https://tailwindcss.com/)
+[![Google AI](https://img.shields.io/badge/Google-Gemini-red.svg)](https://ai.google.dev/)
 
 ## 🌟 Overview
+
+MediMate is an innovative health and wellness platform powered by Google's Gemini AI. It provides personalized health advice, medical information, and wellness guidance through an interactive chat interface. With secure user authentication and email verification, users can safely access personalized health recommendations and maintain their medical history.
+
+## ✨ Key Features
+
+- 🤖 **AI-Powered Health Assistant**: Utilizes Google's Gemini AI for intelligent health guidance
+- 🔒 **Secure Authentication**: JWT-based user authentication system
+- ✉️ **Email Verification**: Two-step verification process for enhanced security
+- 💾 **Data Persistence**: MongoDB integration for storing user data and chat history
+- 🌐 **RESTful Architecture**: Well-structured API endpoints for scalability
+- 🎯 **Personalization**: Customized health recommendations based on user profile
+- 📱 **Responsive Design**: Mobile-friendly interface for access on any device
+
+## 🛠️ Tech Stack
+
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB Atlas
+- **AI Integration**: Google Generative AI (Gemini)
+- **Authentication**: JSON Web Tokens (JWT)
+- **Email Service**: Nodemailer
+
+### Frontend
+- **HTML5** with modern semantic elements
+- **CSS3** with responsive design
+- **JavaScript** for dynamic interactions
+- **Fetch API** for seamless backend communication
+
+## 🚀 Getting Started
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/sarojsenn/Health-Guide-Project.git
+   cd Health-Guide-Project
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   # Server dependencies
+   cd server
+   npm install
+
+   # Client setup
+   cd ../client
+   # No installation needed - pure HTML/CSS/JS
+   ```
+
+3. **Environment Setup**
+   Create a `.env` file in the server directory:
+   ```env
+   MONGO_URI=your_mongodb_connection_string
+   JWT_SECRET=your_jwt_secret
+   EMAIL_USER=your_email
+   EMAIL_PASS=your_email_app_password
+   GEMINI_API_KEY=your_gemini_api_key
+   ```
+
+4. **Start the Server**
+   ```bash
+   cd server
+   npm start
+   ```
+
+5. **Launch the Application**
+   - Open `client/main.html` in your browser
+   - Register a new account
+   - Verify your email
+   - Start chatting with the AI health assistant!
+
+## 🔗 API Documentation
+
+### Authentication Endpoints
+- **POST** `/api/auth/register` - Register new user
+- **POST** `/api/auth/login` - User login
+- **POST** `/api/auth/verify` - Email verification
+
+### Health Assistant Endpoints
+- **POST** `/api/chatbot/chat` - Interact with AI
+- **GET** `/api/chatbot/history` - Retrieve chat history
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License.
+
+## 📞 Contact
+
+- **Developer**: Saroj Sen
+- **Email**: sarojsen2009@gmail.com
+- **Project Link**: https://github.com/sarojsenn/Health-Guide-Project
+
+---
+
+Made with ❤️ by Saroj Sen
 
 HealthGuide is a comprehensive AI-powered health and wellness platform that provides personalized health recommendations, goal tracking, nutrition analysis, water quality monitoring, and health management capabilities. Built with modern web technologies, it offers a seamless experience for users to manage their complete health journey.
 
