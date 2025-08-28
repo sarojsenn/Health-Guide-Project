@@ -1,4 +1,4 @@
-# 🌟 MediMate - Complete Health & Wellness Platform
+# 🌟 HealthGuide - Complete Health & Wellness Platform
 
 [![Node.js](https://img.shields.io/badge/Node.js-16.x-green.svg)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green.svg)](https://www.mongodb.com/atlas)
@@ -8,7 +8,7 @@
 
 ## 🌟 Overview
 
-MediMate is an innovative health and wellness platform powered by Google's Gemini AI. It provides personalized health advice, medical information, and wellness guidance through an interactive chat interface. With secure user authentication and email verification, users can safely access personalized health recommendations and maintain their medical history.
+HealthGuide is an innovative health and wellness platform powered by Google's Gemini AI. It provides personalized health advice, medical information, and wellness guidance through an interactive chat interface. With secure user authentication and email verification, users can safely access personalized health recommendations and maintain their medical history.
 
 ## ✨ Key Features
 
