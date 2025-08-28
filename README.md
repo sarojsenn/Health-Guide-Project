@@ -369,7 +369,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## � Development Team
 
-### **Team TASK - K-1000 Ignithon Hackathon Winners**
+### **Team TASK - K-1000 Ignithon Hackathon**
 
 **Team Members:**
 - **Saroj Sen** (Team Lead)
