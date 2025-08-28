@@ -110,10 +110,6 @@ This project is licensed under the MIT License.
 
 ---
 
-Made with ❤️ by Saroj Sen
-
-HealthGuide is a comprehensive AI-powered health and wellness platform that provides personalized health recommendations, goal tracking, nutrition analysis, water quality monitoring, and health management capabilities. Built with modern web technologies, it offers a seamless experience for users to manage their complete health journey.
-
 ## ✨ Key Features
 
 ### 🔐 **Secure Authentication System**
